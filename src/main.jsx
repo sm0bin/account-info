@@ -16,12 +16,14 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import AuthProvider from "./provider/AuthProvider";
+import ErrorPage from "./components/pages/ErrorPage";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",

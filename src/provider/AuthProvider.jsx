@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import useAxiosPublic from '../hooks/useAxiosPublic';
 
 const AuthContext = createContext();
@@ -11,9 +11,9 @@ const AuthProvider = ({ children }) => {
     const axiosPublic = useAxiosPublic();
     const [token, setToken] = useState(localStorage.getItem('token') || null);
 
-    const signup = async (username, email, password) => {
+    const signup = async (fullName, email, password) => {
         try {
-            const res = await axiosPublic.post('/users/signup', { username, email, password });
+            const res = await axiosPublic.post('/users/signup', { fullName, email, password });
             const newToken = res.data.token;
             setToken(newToken);
             localStorage.setItem('token', newToken);
@@ -22,9 +22,9 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    const login = async (username, password) => {
+    const login = async (email, password) => {
         try {
-            const res = await axiosPublic.post('/users/login', { username, password });
+            const res = await axiosPublic.post('/users/login', { email, password });
             const newToken = res.data.token;
             setToken(newToken);
             localStorage.setItem('token', newToken);

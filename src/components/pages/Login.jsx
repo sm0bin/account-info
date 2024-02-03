@@ -1,31 +1,28 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import useAxiosPublic from '../../hooks/useAxiosPublic';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../provider/AuthProvider';
 
 const Login = () => {
-    const axiosPublic = useAxiosPublic();
+    const { login } = useAuth();
     const navigate = useNavigate();
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData);
-        console.log(data);
 
-        axiosPublic.post('/users/login', data)
-            .then((res) => {
-                console.log(res.data);
-                localStorage.setItem('token', res.data.token);
-                // localStorage.setItem('user', JSON.stringify(res.data.user));
-                toast.success('Login Success!');
-                console.log(res);
+        login(data.email, data.password)
+            .then(() => {
+                toast.success('Login successful!');
                 navigate('/');
-            })
-            .catch((err) => {
-                console.error(err.response.data.message);
-                toast.error(err.response.data.message);
+                window.location.reload(true);
+            }).catch((error) => {
+                console.error('Error Logging in:', error);
+                toast.error('Error Logging in. Please try again.');
             });
-    }
+    };
 
     return (
         <div className="hero min-h-screen bg-base-200">

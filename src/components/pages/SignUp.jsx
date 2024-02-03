@@ -1,32 +1,26 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import useAxiosPublic from '../../hooks/useAxiosPublic';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../provider/AuthProvider';
 
 const SignUp = () => {
-    const axiosPublic = useAxiosPublic();
+    const { signup } = useAuth();
     const navigate = useNavigate();
-    // full name, role (House Owner or
-    //     House Renter) (it must be selected as an option), phone number, email, and password
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData);
-        console.log(data);
-        axiosPublic.post('/users/signup', data)
-            .then((res) => {
-                console.log(res.data);
-                localStorage.setItem('token', res.data.token);
-                // localStorage.setItem('user', JSON.stringify(res.data.user));
-
-                toast.success('Sign Up Success!');
+        signup(data.fullName, data.email, data.password)
+            .then(() => {
+                toast.success('Sign Up successful!');
                 navigate('/');
-            })
-            .catch((err) => {
-                console.log(err.response.data);
+                window.location.reload(true);
+            }).catch((error) => {
+                console.error('Error signing up:', error);
+                toast.error('Error signing up. Please try again.');
             });
-
-    }
+    };
 
     return (
         <div className="hero min-h-screen bg-base-200">

@@ -1,13 +1,22 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
-// import useAuth from '../../hooks/useAuth';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import useLoadDataSecure from '../../hooks/useLoadDataSecure';
+import { useAuth } from '../../provider/AuthProvider';
+import { toast } from 'react-hot-toast';
 
 const Navbar = () => {
-    // const user = useAuth();
-    // const user = { fullName: "John Doe", email: "place@gmail.com", role: "House Hunter" }
+    const { logout } = useAuth();
+    const navigate = useNavigate();
     const [user, refetchUser] = useLoadDataSecure('/users/me', 'User');
-    console.log(user);
+
+    const handleLogout = () => {
+        logout()
+        toast.success('Logged out successfully');
+        // refetchUser();
+        navigate('/');
+        window.location.reload(true);
+    }
+
     const navLinks = [
         {
             title: "Home",
@@ -66,7 +75,7 @@ const Navbar = () => {
                                     <a>Settings</a>
                                 </li>
                                 <li>
-                                    <a>Logout</a>
+                                    <a onClick={handleLogout}>Logout</a>
                                 </li>
                             </ul>
                         </div>
