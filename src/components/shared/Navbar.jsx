@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+// import useAuth from '../../hooks/useAuth';
 import useLoadDataSecure from '../../hooks/useLoadDataSecure';
 
 const Navbar = () => {
